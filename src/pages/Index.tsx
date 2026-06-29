@@ -298,9 +298,9 @@ export default function Index() {
               <p className="text-sm leading-relaxed">
                 +7 (900) 123-45-67
                 <br />
-                hello@flora.studio
+                vilkaevn@gmail.com
                 <br />
-                Москва, ул. Цветочная, 1
+                Екатеринбург, пр. Решетникова, д. 16
               </p>
             </div>
             <div>
