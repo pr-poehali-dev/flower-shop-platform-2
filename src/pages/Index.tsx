@@ -225,7 +225,9 @@ export default function Index() {
               className="w-full aspect-square object-cover"
             />
             <div>
-              <h2 className="font-display text-4xl mb-6">Студия Flora</h2>
+              <h2 className="font-display text-4xl mb-6">
+                Студия Мамина Бегония
+              </h2>
               <p className="text-muted-foreground leading-relaxed mb-5">
                 Мы — небольшая команда флористов, влюблённых в своё дело. С 2016
                 года создаём букеты и флорариумы, которые становятся частью
@@ -284,7 +286,7 @@ export default function Index() {
         <div className="container py-20">
           <div className="grid md:grid-cols-3 gap-12">
             <div>
-              <div className="font-display text-3xl mb-4">Flora</div>{" "}
+              <div className="font-display text-3xl mb-4">Мамина Бегония</div>{" "}
               <p className="text-sm text-primary-foreground/60 max-w-xs leading-relaxed">
                 Премиальные флорариумы ручной работы.
               </p>
