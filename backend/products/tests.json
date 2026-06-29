@@ -1,0 +1,16 @@
+{
+  "tests": [
+    {
+      "name": "Get products list",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Delete without token forbidden",
+      "method": "DELETE",
+      "path": "/?id=999",
+      "expectedStatus": 403
+    }
+  ]
+}
