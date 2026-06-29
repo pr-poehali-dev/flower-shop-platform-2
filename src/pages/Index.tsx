@@ -107,7 +107,7 @@ export default function Index() {
       <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container flex items-center justify-between h-20">
           <a href="/" className="font-display text-3xl tracking-wide">
-            Flora
+            Мамина Бегония
           </a>
           <nav className="hidden md:flex items-center gap-10">
             {TABS.map((t) => (
