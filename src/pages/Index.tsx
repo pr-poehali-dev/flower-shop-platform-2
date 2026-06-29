@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "@/components/ui/icon";
+import func2url from "../../backend/func2url.json";
+
+const API = func2url.products;
 
 const HERO_IMG =
   "https://cdn.poehali.dev/projects/0658668e-0861-46c8-ab6d-6f150baa7aa4/files/4ae8b193-ebb2-4a95-9f22-c6a917331b03.jpg";
 const TERRARIUM_IMG =
   "https://cdn.poehali.dev/projects/0658668e-0861-46c8-ab6d-6f150baa7aa4/files/0f79ee21-d6f4-4d70-b27a-eb9f92cc46b5.jpg";
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  category: string;
+  image: string;
+}
 
 const TABS = [
   { id: "flowers", label: "Цветы" },
@@ -14,48 +26,6 @@ const TABS = [
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
-
-const flowers = [
-  {
-    name: "Белые пионы",
-    price: "8 900 ₽",
-    desc: "Нежный моно-букет",
-    img: HERO_IMG,
-  },
-  {
-    name: "Английские розы",
-    price: "12 400 ₽",
-    desc: "Сорт David Austin",
-    img: HERO_IMG,
-  },
-  {
-    name: "Полевая нежность",
-    price: "6 200 ₽",
-    desc: "Сезонная композиция",
-    img: HERO_IMG,
-  },
-];
-
-const terrariums = [
-  {
-    name: "Изумрудный сад",
-    price: "14 800 ₽",
-    desc: "Стекло, мох, суккуленты",
-    img: TERRARIUM_IMG,
-  },
-  {
-    name: "Лесная сфера",
-    price: "9 900 ₽",
-    desc: "Подвесной флорариум",
-    img: TERRARIUM_IMG,
-  },
-  {
-    name: "Каменный остров",
-    price: "11 300 ₽",
-    desc: "Минимализм для интерьера",
-    img: TERRARIUM_IMG,
-  },
-];
 
 const posts = [
   {
@@ -71,18 +41,31 @@ const posts = [
   },
 ];
 
-function ProductGrid({ items }: { items: typeof flowers }) {
+function ProductGrid({
+  items,
+  fallbackImg,
+}: {
+  items: Product[];
+  fallbackImg: string;
+}) {
+  if (items.length === 0) {
+    return (
+      <p className="text-center text-muted-foreground py-10">
+        Скоро здесь появятся новинки.
+      </p>
+    );
+  }
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-14">
       {items.map((item, i) => (
         <div
-          key={item.name}
+          key={item.id}
           className="group animate-fade-in opacity-0"
           style={{ animationDelay: `${i * 120}ms` }}
         >
           <div className="overflow-hidden bg-secondary aspect-[4/5] mb-5">
             <img
-              src={item.img}
+              src={item.image || fallbackImg}
               alt={item.name}
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
@@ -93,7 +76,9 @@ function ProductGrid({ items }: { items: typeof flowers }) {
               {item.price}
             </span>
           </div>
-          <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {item.description}
+          </p>
           <button className="mt-4 text-xs tracking-[0.2em] uppercase border-b border-foreground/30 pb-1 hover:border-foreground transition-colors">
             В корзину
           </button>
@@ -105,6 +90,17 @@ function ProductGrid({ items }: { items: typeof flowers }) {
 
 export default function Index() {
   const [tab, setTab] = useState<TabId>("flowers");
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    fetch(API)
+      .then((r) => r.json())
+      .then((d) => setProducts(d.items || []))
+      .catch(() => setProducts([]));
+  }, []);
+
+  const flowers = products.filter((p) => p.category === "flowers");
+  const terrariums = products.filter((p) => p.category === "terrariums");
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -207,7 +203,7 @@ export default function Index() {
               Каждый букет собирается вручную в день доставки из свежесрезанных
               цветов.
             </p>
-            <ProductGrid items={flowers} />
+            <ProductGrid items={flowers} fallbackImg={HERO_IMG} />
           </div>
         )}
 
@@ -217,7 +213,7 @@ export default function Index() {
               Живые композиции в стекле, которые украсят интерьер и не требуют
               сложного ухода.
             </p>
-            <ProductGrid items={terrariums} />
+            <ProductGrid items={terrariums} fallbackImg={TERRARIUM_IMG} />
           </div>
         )}
 
